@@ -8,15 +8,17 @@ public class EscapeRoom {
     private String name;
     private String address;
     private String url;
+    private String photoUrl;
 
     public EscapeRoom() {
 
     }
 
-    public EscapeRoom(String name, String address, String url){
+    public EscapeRoom(String name, String address, String url, String photoUrl) {
         this.name = name;
         this.address = address;
         this.url = url;
+        this.photoUrl = photoUrl;
     }
 
     public String getName() {
@@ -41,5 +43,13 @@ public class EscapeRoom {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

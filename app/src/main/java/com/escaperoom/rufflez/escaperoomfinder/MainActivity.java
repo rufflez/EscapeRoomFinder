@@ -2,10 +2,10 @@ package com.escaperoom.rufflez.escaperoomfinder;
 
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,26 +27,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MainActivity extends AppCompatActivity implements
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener {
 
-    public static class RoomViewHolder extends RecyclerView.ViewHolder{
-        TextView roomName;
-        TextView roomAddress;
-        TextView roomUrl;
-
-        public RoomViewHolder(View v){
-            super(v);
-            roomName = (TextView)itemView.findViewById(R.id.name);
-            roomAddress = (TextView)itemView.findViewById(R.id.address);
-            roomUrl = (TextView)itemView.findViewById(R.id.url);
-        }
-    }
     public static final String ROOMS = "rooms";
+    public static final String ANONYMOUS = "anonymous";
+    private static final String TAG = "MainActivity";
     private String mUsername;
     private String mPhotoUrl;
     private GoogleApiClient mGoogleApiClient;
-    public static final String ANONYMOUS = "anonymous";
-    private static final String TAG = "MainActivity";
     //Recycler View Setup
     private RecyclerView mRoomRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
@@ -55,9 +43,7 @@ public class MainActivity extends AppCompatActivity implements
     private FirebaseAnalytics mFirebaseAnalytics;
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<EscapeRoom, RoomViewHolder> mFirebaseAdapter;
-
     private FloatingActionButton new_room;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements
         //mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         //mUsername = ANONYMOUS;
         //Initialize RecyclerView
-        mRoomRecyclerView = (RecyclerView)findViewById(R.id.roomRecyclerView);
+        mRoomRecyclerView = (RecyclerView) findViewById(R.id.roomRecyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
 
@@ -104,13 +90,13 @@ public class MainActivity extends AppCompatActivity implements
             }
         };
 
-        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver(){
+        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
-            public void onItemRangeInserted(int positionStart, int itemCount){
+            public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
                 int roomCount = mFirebaseAdapter.getItemCount();
                 int lastVisiblePosition = mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
-                if (lastVisiblePosition == -1 || (positionStart >= (roomCount -1) && lastVisiblePosition == (positionStart -1))){
+                if (lastVisiblePosition == -1 || (positionStart >= (roomCount - 1) && lastVisiblePosition == (positionStart - 1))) {
                     mRoomRecyclerView.scrollToPosition(positionStart);
                 }
             }
@@ -118,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements
         mRoomRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRoomRecyclerView.setAdapter(mFirebaseAdapter);
 
-        new_room = (FloatingActionButton)findViewById(R.id.new_room);
+        new_room = (FloatingActionButton) findViewById(R.id.new_room);
         new_room.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,8 +122,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.sign_out:
                 mFirebaseAuth.signOut();
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient);
@@ -179,5 +165,18 @@ public class MainActivity extends AppCompatActivity implements
         // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
         Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+    }
+
+    public static class RoomViewHolder extends RecyclerView.ViewHolder {
+        TextView roomName;
+        TextView roomAddress;
+        TextView roomUrl;
+
+        public RoomViewHolder(View v) {
+            super(v);
+            roomName = (TextView) itemView.findViewById(R.id.name);
+            roomAddress = (TextView) itemView.findViewById(R.id.address);
+            roomUrl = (TextView) itemView.findViewById(R.id.url);
+        }
     }
 }
