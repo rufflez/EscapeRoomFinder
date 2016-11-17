@@ -12,9 +12,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
@@ -79,14 +81,14 @@ public class MainActivity extends AppCompatActivity implements
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<EscapeRoom, RoomViewHolder>(
                 EscapeRoom.class,
-                R.layout.escape_room,
+                R.layout.escape_room_list,
                 RoomViewHolder.class,
                 mFirebaseDatabaseReference.child(ROOMS)) {
             @Override
             protected void populateViewHolder(RoomViewHolder viewHolder, EscapeRoom model, int position) {
                 viewHolder.roomName.setText(model.getName());
                 viewHolder.roomAddress.setText(model.getAddress());
-                viewHolder.roomUrl.setText(model.getUrl());
+                Glide.with(MainActivity.this).load(model.getPhotoUrl()).into(viewHolder.roomPhoto);
             }
         };
 
@@ -170,13 +172,13 @@ public class MainActivity extends AppCompatActivity implements
     public static class RoomViewHolder extends RecyclerView.ViewHolder {
         TextView roomName;
         TextView roomAddress;
-        TextView roomUrl;
+        ImageView roomPhoto;
 
         public RoomViewHolder(View v) {
             super(v);
-            roomName = (TextView) itemView.findViewById(R.id.name);
-            roomAddress = (TextView) itemView.findViewById(R.id.address);
-            roomUrl = (TextView) itemView.findViewById(R.id.url);
+            roomName = (TextView) itemView.findViewById(R.id.escape_name);
+            roomAddress = (TextView) itemView.findViewById(R.id.escape_address);
+            roomPhoto = (ImageView) itemView.findViewById(R.id.escape_photo);
         }
     }
 }
